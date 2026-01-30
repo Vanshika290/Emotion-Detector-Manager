@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import { Send, Loader2, CheckCircle, AlertCircle, Camera } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Send, Loader2, CheckCircle, AlertCircle, Camera, Mic, Image as ImageIcon } from 'lucide-react';
 import { detectEmotion, analyzeIntensity } from '@/app/utils/emotionDetection';
 import { saveEmotionEntry, type EmotionEntry } from '@/app/utils/emotionStorage';
 import FacialEmotionDetection from '@/app/components/FacialEmotionDetection';
+import VoiceEmotionDetection from '@/app/components/VoiceEmotionDetection';
+import ImageEmotionDetection from '@/app/components/ImageEmotionDetection';
 
 interface EmotionEntryProps {
   onSuccess: () => void;
@@ -19,10 +21,12 @@ export default function EmotionEntry({ onSuccess }: EmotionEntryProps) {
   } | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showFacialDetection, setShowFacialDetection] = useState(false);
+  const [showVoiceDetection, setShowVoiceDetection] = useState(false);
+  const [showImageDetection, setShowImageDetection] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!text.trim()) {
       return;
     }
@@ -104,15 +108,31 @@ export default function EmotionEntry({ onSuccess }: EmotionEntryProps) {
           <p className="text-gray-600">
             Share your thoughts, feelings, or experiences. Our AI will analyze the emotional content and track your emotional journey.
           </p>
-          
-          {/* Facial Recognition Button */}
-          <button
-            onClick={() => setShowFacialDetection(true)}
-            className="mt-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition-all flex items-center gap-2"
-          >
-            <Camera className="w-5 h-5" />
-            Use Facial Emotion Detection
-          </button>
+
+          {/* Input Method Buttons */}
+          <div className="mt-6 flex flex-wrap gap-4">
+            <button
+              onClick={() => setShowFacialDetection(true)}
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-5 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2 text-sm"
+            >
+              <Camera className="w-5 h-5" />
+              Live Camera
+            </button>
+            <button
+              onClick={() => setShowVoiceDetection(true)}
+              className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-5 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2 text-sm"
+            >
+              <Mic className="w-5 h-5" />
+              Voice Scan
+            </button>
+            <button
+              onClick={() => setShowImageDetection(true)}
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-5 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center gap-2 text-sm"
+            >
+              <ImageIcon className="w-5 h-5" />
+              Upload Image
+            </button>
+          </div>
         </div>
 
         {/* Entry Form */}
@@ -264,6 +284,22 @@ export default function EmotionEntry({ onSuccess }: EmotionEntryProps) {
       {showFacialDetection && (
         <FacialEmotionDetection
           onClose={() => setShowFacialDetection(false)}
+          onSuccess={onSuccess}
+        />
+      )}
+
+      {/* Voice Emotion Detection Modal */}
+      {showVoiceDetection && (
+        <VoiceEmotionDetection
+          onClose={() => setShowVoiceDetection(false)}
+          onSuccess={onSuccess}
+        />
+      )}
+
+      {/* Image Emotion Detection Modal */}
+      {showImageDetection && (
+        <ImageEmotionDetection
+          onClose={() => setShowImageDetection(false)}
           onSuccess={onSuccess}
         />
       )}
