@@ -7,6 +7,10 @@
 
 ---
 
+
+Check the deployed link: emotion-detector-manager.vercel.app
+
+
 ## 📌 Overview
 
 The **Emotion Detector Application** is an AI-powered web application that detects human emotions using **multiple input modalities**.  
