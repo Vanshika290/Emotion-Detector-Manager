@@ -8,7 +8,7 @@
 ---
 
 
-Check the deployed link: emotion-detector-manager.vercel.app
+Check the deployed link: [emotion-detector-manager.vercel.app](https://emotion-detector-manager.vercel.app/)
 
 
 ## 📌 Overview
